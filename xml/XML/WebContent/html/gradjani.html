@@ -1,0 +1,18 @@
+<div>
+	<h1>Pregled</h1>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button ng-click = "login()">Login</button>
+   
+	<div align="center">
+	 <form>
+		 <input type="text" placeholder="Search" ng-model="search">
+	</form>
+	<table border="1">
+		<tr bgcolor="lightgrey">
+			<th>Naziv</th></tr>
+			<tr ng-repeat="i in res | filter:search">
+			<td> {{i.name}}</td>
+		</tr>
+	</table>
+	</div>
+</div>
