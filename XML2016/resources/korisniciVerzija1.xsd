@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http//www.parlament.gov.rs/korisnici"
+    targetNamespace="http//www.parlament.gov.rs/korisnici" elementFormDefault="qualified">
+
+    <xs:element name="precednik_skupstine">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="odbornik"/>
+                <xs:element name="redni_broj" type="xs:nonPositiveInteger"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="odbornik">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="gradjanin"/>
+                <xs:element name="broj_mesta"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="gradjanin">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ime" type="xs:string"/>
+                <xs:element name="prezime" type="xs:string"/>
+                <xs:element name="korisnicko_ime" type="xs:string"/>
+                <xs:element name="lozinka" type="xs:string"/>
+                <xs:element name="id" type="xs:positiveInteger"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
