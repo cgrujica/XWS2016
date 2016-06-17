@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.parlament.gov.rs/propisi"
+    xmlns="http://www.parlament.gov.rs/propisi">
+
+    <xs:element name="amdandman">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id_zakona" type="xs:positiveInteger"/>
+                <xs:element name="red_br_clana" type="xs:positiveInteger"/>
+                <xs:element name="sadrzaj" type="xs:string"/>
+                <xs:element name="status" type="xs:string"/>
+                <xs:element name="id" type="xs:positiveInteger">
+                    <xs:key name="newKey">
+                        <xs:selector xpath="amandman"/>
+                        <xs:field xpath="id"/>
+                    </xs:key>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="zakon">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="deo">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element maxOccurs="unbounded" minOccurs="0" ref="clan"/>
+                            <xs:element maxOccurs="unbounded" name="glava" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="title" type="xs:string"/>
+                                        <xs:choice>
+                                            <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                ref="clan"/>
+                                            <xs:element maxOccurs="unbounded" name="odeljak"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                  <xs:choice>
+                                                  <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                  name="pododeljak">
+                                                  <xs:complexType>
+                                                  <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded" ref="clan"/>
+                                                  </xs:sequence>
+                                                  <xs:attribute name="naziv" type="xs:string"
+                                                  use="required"/>
+                                                  <xs:attribute name="br" type="xs:string"
+                                                  use="required"/>
+                                                  </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                  ref="clan"/>
+                                                  </xs:choice>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:choice>
+                                    </xs:sequence>
+                                    <xs:attribute name="redBr" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                        <xs:attribute name="naziv" type="xs:string" use="required"/>
+                        <xs:attribute name="ID" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="naziv" type="xs:string" use="required"/>
+            <xs:attribute name="ID" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="clan">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element name="naslov" type="xs:string"/>
+                <xs:element name="sadrzaj">
+                    <xs:complexType mixed="true">
+                        <xs:choice>
+                            <xs:element maxOccurs="unbounded" minOccurs="0" name="stav">
+                                <xs:complexType mixed="true">
+                                    <xs:sequence>
+                                        <xs:element maxOccurs="unbounded" minOccurs="0" name="tacka">
+                                            <xs:complexType mixed="true">
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                  name="podtacka">
+                                                  <xs:complexType mixed="true">
+                                                  <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                  name="alinea">
+                                                  <xs:complexType>
+                                                  <xs:simpleContent>
+                                                  <xs:extension base="xs:string">
+                                                  <xs:attribute name="id"/>
+                                                  </xs:extension>
+                                                  </xs:simpleContent>
+                                                  </xs:complexType>
+                                                  </xs:element>
+                                                  </xs:sequence>
+                                                  <xs:attribute name="id"/>
+                                                  </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="id" type="xs:string"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="redBr" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
