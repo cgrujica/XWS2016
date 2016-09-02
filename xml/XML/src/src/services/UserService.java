@@ -1,4 +1,4 @@
-package src.sessionbeans;
+package src.services;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +13,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-
-
-
+import src.sessionbeans.LoginTry;
+import src.sessionbeans.User;
+import src.sessionbeans.UserDao;
 
 @Path("/user")
 public class UserService {
@@ -30,6 +30,7 @@ public class UserService {
 	UserDao k = new UserDao("","");
 	
 	@GET
+	@Path("/test")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String test(){
 		return "OK";
@@ -46,7 +47,6 @@ public class UserService {
 			return kor;
 		}
 		return null;
-		
 	}
 
 }
