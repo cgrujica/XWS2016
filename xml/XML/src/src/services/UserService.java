@@ -41,11 +41,11 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public User login(LoginTry lt) {
-		User kor = k.getKorisnik(lt.getEmail());
+		/*User kor = k.getKorisnik(lt.getEmail());
 		if(kor!=null && kor.getLozinka().equals(lt.getPass())){
 			System.out.println("Ulogovani kao"+kor.toString());
 			return kor;
-		}
+		}*/
 		return null;
 	}
 
