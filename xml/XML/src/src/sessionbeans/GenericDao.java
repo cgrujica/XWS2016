@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 
 import src.database.EntityManagerMarkLogic;
 import src.rs.gov.parlament.propisi.Identifiable;
+import src.util.ClassUtils;
 
 
 public abstract class GenericDao<T extends Identifiable, ID extends Serializable> implements GenericDaoLocal<T, ID> {
@@ -22,7 +23,7 @@ protected String contextPath;
 	public GenericDao(String contextPath, String schemaName) {
 		
 		try {
-			context = JAXBContext.newInstance(contextPath);
+			context = JAXBContext.newInstance(ClassUtils.getClasses(contextPath));
 			em = new EntityManagerMarkLogic<T, ID>(schemaName, contextPath);
 			
 		} catch (Exception e) {
@@ -46,8 +47,9 @@ protected String contextPath;
 	}
 	
 	public List<T> findAll() throws IOException, JAXBException {
-		//TO-DO
-		return null;
+		List<T> result;
+		result = em.findAll();
+		return result;
 	}
 	
 	public void remove(ID id) throws IOException {

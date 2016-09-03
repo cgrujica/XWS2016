@@ -11,6 +11,7 @@ package src.rs.gov.parlament.propisi;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -99,7 +100,7 @@ import javax.xml.bind.annotation.XmlType;
     "status"
 })
 @XmlRootElement(name = "zakon")
-public class Zakon {
+public class Zakon extends Identifiable{
 
     @XmlElement(required = true)
     protected List<Zakon.Deo> deo;
@@ -782,5 +783,16 @@ public class Zakon {
         }
 
     }
+
+
+	@Override
+	public BigInteger getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(BigInteger value) {
+		id = value;	
+	}
 
 }

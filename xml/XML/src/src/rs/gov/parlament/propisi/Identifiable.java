@@ -1,8 +1,10 @@
 package src.rs.gov.parlament.propisi;
 
+import java.math.BigInteger;
+
 public abstract class Identifiable {
     
-    public abstract Long getId();
+    public abstract BigInteger getId();
 	
-	public abstract void setId(Long value);
+	public abstract void setId(BigInteger value);
 }

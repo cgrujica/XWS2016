@@ -1,6 +1,7 @@
 package src.sessionbeans;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,7 +22,7 @@ public class User extends Identifiable implements Serializable {
 	private String telefon;
 	private String email;
 	private String uloga;
-	private Long id;
+	private BigInteger id;
 
 	
 	
@@ -40,13 +41,13 @@ public class User extends Identifiable implements Serializable {
 	
 	@XmlElement
 	@Override
-	public void setId(Long value) {
+	public void setId(BigInteger value) {
 		id = value;
 
 	}
 
 	@Override
-	public Long getId() {
+	public BigInteger getId() {
 		// TODO Auto-generated method stub
 		return id;
 	}
@@ -134,7 +135,7 @@ public class User extends Identifiable implements Serializable {
 
 	public User(int private_id, String korisnicko_ime, String lozinka,
 			String ime, String prezime, String telefon, String email,
-			String uloga, Long id) {
+			String uloga, BigInteger id) {
 		super();
 		this.private_id = private_id;
 		this.korisnicko_ime = korisnicko_ime;
