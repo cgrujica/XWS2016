@@ -40,7 +40,7 @@
 					$state.go('gradjani');
 				};
 
-				$scope.setFaza = function() {
+				$scope.setFaza = function() {		//faze sednice, menjaju se pritiskom na dugme i popunjavanjem rezultata glasanja
 					if (!$scope.faza || $scope.faza.trim()=="") {
 						$scope.faza = "Informisanje";
 						$scope.sledecaFaza = "Predlozi";
@@ -79,14 +79,14 @@
 
 				};
 
-				$scope.isPrecednik = function() {
+				$scope.isPrecednik = function() {		//provera da li je korisnik ulogovan i ako jeste da li je precednik
 					if (!!$scope.user) {
 						return $scope.user.uloga == "precednik";
 					}
 					return false;
 				};
 
-				$scope.gotoviRez = function() {
+				$scope.gotoviRez = function() {		//sluzi za slanje rezultata svakog pojedinackog glasanja na backend, predvidjeno da se salju 3 vrednosti "za","protiv" i "uzdrzano"
 					//	ResourceService.store().success(function(data) {
 					$scope.res.splice(0,1);
 
@@ -94,7 +94,7 @@
 
 				};
 
-				$scope.gotovo = function() {
+				$scope.gotovo = function() {		//provera da li su svi rezultati uneseni
 					if($scope.res){
 						return ($scope.res.length > 0 && $scope.faza=="Rezultati");
 					}
