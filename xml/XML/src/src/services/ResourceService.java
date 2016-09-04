@@ -29,10 +29,7 @@ public class ResourceService {
     @Produces(MediaType.APPLICATION_JSON)
 	public List<Zakon> getAllZakoniJson() {
 		resource = new ResourceDao("src.rs.gov.parlament.propisi");
-		Zakon doc = resource.getZakon(); 
-		
-		List<Zakon> docs = new ArrayList<Zakon>();
-		docs.add(doc);
+		List<Zakon> docs = resource.getZakoni(); 
 		
 		return docs;
 	}
