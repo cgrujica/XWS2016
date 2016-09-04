@@ -11,5 +11,6 @@ import src.rs.gov.parlament.propisi.Zakon;
 public interface ResourceDaoLocal extends GenericDaoLocal<Zakon, Long>{
     
 	public Zakon getZakon();
+	public List<Zakon> getZakoni();
 	public PrecednikSkupstine getPrec();
 }

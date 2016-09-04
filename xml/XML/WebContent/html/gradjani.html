@@ -10,8 +10,8 @@
 	<table border="1">
 		<tr bgcolor="lightgrey">
 			<th>Naziv</th></tr>
-			<tr ng-repeat="i in res | filter:search">
-			<td> {{i.name}}</td>
+			<tr ng-repeat="i in res | filter:search track by $index">
+			<td> {{i.naziv}}</td>
 		</tr>
 	</table>
 	</div>

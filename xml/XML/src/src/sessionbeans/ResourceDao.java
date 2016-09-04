@@ -49,4 +49,18 @@ public class ResourceDao extends GenericDao<Zakon, Long> implements ResourceDaoL
 		}	
 		return docs;
 	}
+
+	@Override
+	public List<Zakon> getZakoni() {
+		List<Zakon> docs = new ArrayList<Zakon>();
+		try {
+			 docs = em.findZakoni();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}	
+		return docs;
+	}
+	
 }

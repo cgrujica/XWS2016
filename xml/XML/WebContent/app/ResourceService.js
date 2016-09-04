@@ -4,7 +4,7 @@
 		var factory={};
     
         factory.getRes= function(callback){		//poziva get funkciju sa resurs patha ocekuje kolekcije
-           return $http.get('/XML/rest/resurs/zakoni');
+           return $http.get('/XML/rest/resurs/zakonij');
         };
         
        //treba posebna funkcija koja vraca izglasane zakone

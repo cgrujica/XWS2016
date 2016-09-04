@@ -328,7 +328,46 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		client.release();
 		return results;
 	}
-    	
+    
+	@SuppressWarnings("unchecked")
+	public List<Zakon> findZakoni() throws IOException, JAXBException {	
+		List<Zakon> results = new ArrayList<Zakon>();
+
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
+		}
+
+		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
+
+		// A handle to receive the document's content.
+		DOMHandle content = new DOMHandle();
+
+		// A metadata handle for metadata retrieval
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+
+		String docId = "/example/zakon.xml";
+		
+		xmlManager.read(docId, metadata, content);
+
+		// Retrieving a document node form DOM handle.
+		Document doc = content.get();
+
+		// Serializing DOM tree to standard output.
+		System.out.println("[INFO] Retrieved content:");
+		//transform(doc, System.out);
+        
+		Zakon r = (Zakon) unmarshaller.unmarshal(doc);
+		
+		client.release();
+		return results;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public PrecednikSkupstine findPrec() throws IOException, JAXBException {	
 		PrecednikSkupstine results = null;

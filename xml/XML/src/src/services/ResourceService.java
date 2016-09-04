@@ -1,6 +1,7 @@
 package src.services;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -24,11 +25,24 @@ public class ResourceService {
 	private ResourceDaoLocal resource;
 	
 	@GET
-	@Path("/zakoni")
-    @Produces(MediaType.APPLICATION_XML)
-	public Zakon getAllAm() {
+	@Path("/zakonij")
+    @Produces(MediaType.APPLICATION_JSON)
+	public List<Zakon> getAllZakoniJson() {
 		resource = new ResourceDao("src.rs.gov.parlament.propisi");
-		Zakon docs = resource.getZakon(); 
+		Zakon doc = resource.getZakon(); 
+		
+		List<Zakon> docs = new ArrayList<Zakon>();
+		docs.add(doc);
+		
+		return docs;
+	}
+	
+	@GET
+	@Path("/zakonix")
+    @Produces(MediaType.APPLICATION_XML)
+	public List<Zakon> getAllZakoniXml() {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		List<Zakon> docs = resource.getZakoni(); 
 		
 		return docs;
 	}
