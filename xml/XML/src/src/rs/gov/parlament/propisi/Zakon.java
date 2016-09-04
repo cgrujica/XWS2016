@@ -100,7 +100,7 @@ import javax.xml.bind.annotation.XmlType;
     "status"
 })
 @XmlRootElement(name = "zakon")
-public class Zakon extends Identifiable{
+public class Zakon {
 
     @XmlElement(required = true)
     protected List<Zakon.Deo> deo;
@@ -783,16 +783,4 @@ public class Zakon extends Identifiable{
         }
 
     }
-
-
-	@Override
-	public BigInteger getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(BigInteger value) {
-		id = value;	
-	}
-
 }

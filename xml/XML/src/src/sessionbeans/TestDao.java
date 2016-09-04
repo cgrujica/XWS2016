@@ -24,14 +24,12 @@ public class TestDao extends GenericDao<Zakon, Long> implements TestDaoLocal{
 	public String test() {
 		
 		try {
-			findAll();
-		} catch (IOException | JAXBException e) {
+			em.insertInto();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return "test";
-	}
-	
-	
+	}	
 }

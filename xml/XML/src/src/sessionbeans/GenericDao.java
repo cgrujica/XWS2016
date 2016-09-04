@@ -13,8 +13,10 @@ import src.rs.gov.parlament.propisi.Identifiable;
 import src.util.ClassUtils;
 
 
-public abstract class GenericDao<T extends Identifiable, ID extends Serializable> implements GenericDaoLocal<T, ID> {
-protected String contextPath;
+public abstract class GenericDao<T, ID extends Serializable> implements GenericDaoLocal<T, ID> {
+    //extends Identifiable
+	
+	protected String contextPath;
 	
 	protected JAXBContext context;
 	

@@ -24,8 +24,6 @@ public class User extends Identifiable implements Serializable {
 	private String uloga;
 	private BigInteger id;
 
-	
-	
 	public User() {
 	}
 
@@ -35,15 +33,10 @@ public class User extends Identifiable implements Serializable {
 		this.private_id = id;
 	}
 
-	
-
-
-	
 	@XmlElement
 	@Override
 	public void setId(BigInteger value) {
 		id = value;
-
 	}
 
 	@Override
