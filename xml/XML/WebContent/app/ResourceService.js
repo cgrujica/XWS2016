@@ -3,8 +3,8 @@
 	.factory('ResourceService', function($http,$rootScope){
 		var factory={};
     
-        factory.getRes= function(callback){		//poziva default get funkciju sa resurs patha ocekuje kolekcije
-           return $http.get('/XML/rest/resurs');
+        factory.getRes= function(callback){		//poziva get funkciju sa resurs patha ocekuje kolekcije
+           return $http.get('/XML/rest/resurs/zakoni');
         };
         
        //treba posebna funkcija koja vraca izglasane zakone

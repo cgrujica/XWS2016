@@ -17,14 +17,14 @@ import src.rs.gov.parlament.propisi.Zakon;
 import src.sessionbeans.ResourceDao;
 import src.sessionbeans.ResourceDaoLocal;
 
-@Path("resurs")
+@Path("/resurs")
 public class ResourceService {
 
 	//@EJB
 	private ResourceDaoLocal resource;
 	
 	@GET
-	@Path("zakoni")
+	@Path("/zakoni")
     @Produces(MediaType.APPLICATION_XML)
 	public Zakon getAllAm() {
 		resource = new ResourceDao("src.rs.gov.parlament.propisi");
@@ -34,7 +34,7 @@ public class ResourceService {
 	}
 	
 	@GET
-	@Path("korisnici")
+	@Path("/korisnici")
 	@Produces(MediaType.APPLICATION_XML)
 	public PrecednikSkupstine getPrec() throws JAXBException {
 		resource = new ResourceDao("src.http.www_parlament_gov_rs.korisnici");

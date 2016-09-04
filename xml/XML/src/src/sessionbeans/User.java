@@ -157,4 +157,5 @@ public class User extends Identifiable implements Serializable {
 		uloga = "precednik";
 	}
 	
+	
 }
