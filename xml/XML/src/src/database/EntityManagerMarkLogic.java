@@ -50,7 +50,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	public static final String REST_URL = "http://147.91.177.194:8000";
 
 	public static final String MARKLOGIC_CONTEXT_PATH = "com.marklogic.rest";
-	
+
 	private String schemaName;
 
 	private String contextPath;
@@ -75,20 +75,18 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		transformerFactory = TransformerFactory.newInstance();
 	}
 
-	public EntityManagerMarkLogic(String schemaName, String contextPath)
-			throws JAXBException {
+	public EntityManagerMarkLogic(String schemaName, String contextPath) throws JAXBException {
 		setSchemaName(schemaName);
 		setContextPath(contextPath);
 
 		context = JAXBContext.newInstance(contextPath);
-		
+
 		marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		unmarshaller = context.createUnmarshaller();
 
 		try {
-			marklogic_context = JAXBContext.newInstance(ClassUtils
-					.getClasses(MARKLOGIC_CONTEXT_PATH));
+			marklogic_context = JAXBContext.newInstance(ClassUtils.getClasses(MARKLOGIC_CONTEXT_PATH));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,17 +104,17 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> findAll() throws IOException, JAXBException {	
+	public List<T> findAll() throws IOException, JAXBException {
 		List<T> results = new ArrayList<T>();
 
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.database, props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -128,7 +126,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 
 		String docId = "/example/books.xml";
-		
+
 		xmlManager.read(docId, metadata, content);
 
 		// Retrieving a document node form DOM handle.
@@ -137,9 +135,9 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		// Serializing DOM tree to standard output.
 		System.out.println("[INFO] Retrieved content:");
 		transform(doc, System.out);
-        
+
 		results.add((T) doc);
-		
+
 		client.release();
 		return results;
 	}
@@ -147,8 +145,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	/*
 	 * Takes both, XQuery and XUpdate statements.
 	 */
-	public InputStream executeQuery(String xQuery, boolean wrap)
-			throws IOException {
+	public InputStream executeQuery(String xQuery, boolean wrap) throws IOException {
 		// TO-DO
 		return null;
 	}
@@ -161,8 +158,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		// TO-DO
 	}
 
-	public void update(T entity, ID resourceId) throws IOException,
-			JAXBException {
+	public void update(T entity, ID resourceId) throws IOException, JAXBException {
 		// TO-DO
 	}
 
@@ -218,15 +214,50 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		this.context = context;
 	}
 
+	@SuppressWarnings("unchecked")
+	public void saveClient() throws IOException, JAXBException {
+
+		props = ConnUtil.loadProperties();
+
+		if (client == null) {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
+		}
+
+		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
+
+		String docId = "/example/books.xml";
+
+		File f = new File("F:\\FAX\\XML-2016\\PROJEKAT\\primer zakona.xml");
+
+		FileInputStream fi = new FileInputStream(f);
+
+		// Create an input stream handle to hold XML content.
+		InputStreamHandle handle = new InputStreamHandle(fi);
+
+		// Write the document to the database
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \"" + props.database + "\" database.");
+		xmlManager.write(docId, handle);
+
+		System.out.println("[INFO] Verify the content at: http://" + props.host + ":8000/v1/documents?database="
+				+ props.database + "&uri=" + docId);
+
+		// Release the client
+		client.release();
+	}
+
 	public void insertInto() throws IOException {
 		props = ConnUtil.loadProperties();
 
 		if (client == null) {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.database, props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -241,24 +272,23 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		InputStreamHandle handle = new InputStreamHandle(fi);
 
 		// Write the document to the database
-		System.out.println("[INFO] Inserting \"" + docId + "\" to \""
-				+ props.database + "\" database.");
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \"" + props.database + "\" database.");
 		xmlManager.write(docId, handle);
 
-		System.out.println("[INFO] Verify the content at: http://" + props.host
-				+ ":8000/v1/documents?database=" + props.database + "&uri="
-				+ docId);
+		System.out.println("[INFO] Verify the content at: http://" + props.host + ":8000/v1/documents?database="
+				+ props.database + "&uri=" + docId);
 
 		// Release the client
 		client.release();
 	}
-	
+
 	/**
 	 * Serializes DOM tree to an arbitrary OutputStream.
 	 *
-	 * @param node a node to be serialized
-	 * @param out an output stream to write the serialized 
-	 * DOM representation to
+	 * @param node
+	 *            a node to be serialized
+	 * @param out
+	 *            an output stream to write the serialized DOM representation to
 	 * 
 	 */
 	private static void transform(Node node, OutputStream out) {
@@ -274,12 +304,12 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 			// Nad "source" objektom (DOM stablo) vrši se transformacija
 			DOMSource source = new DOMSource(node);
 
-			// Rezultujući stream (argument metode) 
+			// Rezultujući stream (argument metode)
 			StreamResult result = new StreamResult(out);
 
 			// Poziv metode koja vrši opisanu transformaciju
 			transformer.transform(source, result);
-			
+
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();
 		} catch (TransformerFactoryConfigurationError e) {
@@ -288,19 +318,19 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 			e.printStackTrace();
 		}
 	}
-   
+
 	@SuppressWarnings("unchecked")
-	public Zakon findZakon() throws IOException, JAXBException {	
+	public Zakon findZakon() throws IOException, JAXBException {
 		Zakon results = null;
 
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.database, props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -312,7 +342,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 
 		String docId = "/example/zakon.xml";
-		
+
 		xmlManager.read(docId, metadata, content);
 
 		// Retrieving a document node form DOM handle.
@@ -320,27 +350,27 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		// Serializing DOM tree to standard output.
 		System.out.println("[INFO] Retrieved content:");
-		//transform(doc, System.out);
-        
+		// transform(doc, System.out);
+
 		Zakon r = (Zakon) unmarshaller.unmarshal(doc);
 		results = r;
-		
+
 		client.release();
 		return results;
 	}
-    
+
 	@SuppressWarnings("unchecked")
-	public List<Zakon> findZakoni() throws IOException, JAXBException {	
+	public List<Zakon> findZakoni() throws IOException, JAXBException {
 		List<Zakon> results = new ArrayList<Zakon>();
 
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.database, props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -352,7 +382,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 
 		String docId = "/example/zakon.xml";
-		
+
 		xmlManager.read(docId, metadata, content);
 
 		// Retrieving a document node form DOM handle.
@@ -360,26 +390,26 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		// Serializing DOM tree to standard output.
 		System.out.println("[INFO] Retrieved content:");
-		//transform(doc, System.out);
-        
+		// transform(doc, System.out);
+
 		Zakon r = (Zakon) unmarshaller.unmarshal(doc);
-		
+
 		client.release();
 		return results;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public PrecednikSkupstine findPrec() throws IOException, JAXBException {	
+	public PrecednikSkupstine findPrec() throws IOException, JAXBException {
 		PrecednikSkupstine results = null;
 
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.database, props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -391,7 +421,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 
 		String docId = "/example/books.xml";
-		
+
 		xmlManager.read(docId, metadata, content);
 
 		// Retrieving a document node form DOM handle.
@@ -399,14 +429,15 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		// Serializing DOM tree to standard output.
 		System.out.println("[INFO] Retrieved content:");
-		//transform(doc, System.out);
-         
+		// transform(doc, System.out);
+
 		JAXBContext cont = JAXBContext.newInstance("src.http.www_parlament_gov_rs.korisnici");
 		Unmarshaller un = cont.createUnmarshaller();
-		
-		// Unmarshalling generiše objektni model na osnovu XML fajla //new File("C:\\Users\\Danilo\\Documents\\korisnik.xml"
+
+		// Unmarshalling generiše objektni model na osnovu XML fajla //new
+		// File("C:\\Users\\Danilo\\Documents\\korisnik.xml"
 		results = (PrecednikSkupstine) un.unmarshal(doc);
-		
+
 		client.release();
 		return results;
 	}
