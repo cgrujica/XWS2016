@@ -2,6 +2,7 @@ package src.database;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,6 +18,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -38,8 +40,16 @@ import com.marklogic.client.eval.ServerEvaluationCall;
 import com.marklogic.client.io.DOMHandle;
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.InputStreamHandle;
+import com.marklogic.client.io.SearchHandle;
+import com.marklogic.client.query.ExtractedResult;
+import com.marklogic.client.query.KeyValueQueryDefinition;
+import com.marklogic.client.query.MatchDocumentSummary;
+import com.marklogic.client.query.MatchLocation;
 import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
+import com.marklogic.client.query.StructuredQueryBuilder;
+import com.marklogic.client.query.StructuredQueryDefinition;
+import com.marklogic.client.util.EditableNamespaceContext;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import src.com.marklogic.rest.Result;
@@ -74,7 +84,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	private static DatabaseClient client;
 
 	ConnectionProperties props;
-
+		
 	private static TransformerFactory transformerFactory;
 
 	static {
@@ -221,11 +231,16 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void saveClient() throws IOException, JAXBException {
+	public void saveClient()  {
 
-		props = ConnUtil.loadProperties();
-
-		if (client == null) {
+		try {
+			props = ConnUtil.loadProperties();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		if (props.database.equals("")) {
 			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
 					props.authType);
 		} else {
@@ -235,11 +250,17 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
 
-		String docId = "/example/books.xml";
+		String docId = "/example/klijent.xml";
 
-		File f = new File("F:\\FAX\\XML-2016\\PROJEKAT\\primer zakona.xml");
+		File f = new File("F:\\FAX\\XML-2016\\PROJEKAT\\primer klijenta.xml");
 
-		FileInputStream fi = new FileInputStream(f);
+		FileInputStream fi = null;
+		try {
+			fi = new FileInputStream(f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Create an input stream handle to hold XML content.
 		InputStreamHandle handle = new InputStreamHandle(fi);
@@ -452,8 +473,52 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		return results;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean checkAccount(String username, String password) {
-		return true;
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public boolean checkAccount(String username, String password) throws IOException, JAXBException {
+		boolean valid = false;
+		Zakon results = null;
+
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
+		}
+		
+		QueryManager queryMgr = client.newQueryManager();
+		SearchHandle handle = new SearchHandle();
+		KeyValueQueryDefinition query = queryMgr.newKeyValueDefinition();
+		query.put(queryMgr.newElementLocator(new QName("korisnicko_ime")),username);
+		queryMgr.search(query, handle);
+		MatchDocumentSummary matches1[] = handle.getMatchResults();
+		//Document resultsDocument = handle.get();
+		
+		SearchHandle handle2 = new SearchHandle();
+		KeyValueQueryDefinition query2 = queryMgr.newKeyValueDefinition();
+		query2.put(queryMgr.newElementLocator(new QName("lozinka")),password);
+		queryMgr.search(query2, handle2);
+		MatchDocumentSummary matches2[] = handle2.getMatchResults();
+		
+		MatchLocation[] user = matches1[0].getMatchLocations();
+		MatchLocation[] pass = matches2[0].getMatchLocations();
+		for(int i=0;i<user.length;i++)
+		{
+			for (int y=0;y<pass.length;y++)
+			{
+				if(user[i].getPath().equals(pass[y].getPath()))
+				{
+					valid = true;
+				}
+			}
+		}
+
+		// Release the client
+		client.release();
+		
+		
+		return valid;
 	}
 }

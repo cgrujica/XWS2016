@@ -1,5 +1,7 @@
 package src.services;
 
+import java.io.IOException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -40,7 +43,7 @@ public class UserService {
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public User login(LoginTry lt) {
+	public User login(LoginTry lt) throws IOException, JAXBException {
 		User kor = new User();
 		/*if(kor!=null && kor.getLozinka().equals(lt.getPass())){
 			System.out.println("Ulogovani kao"+kor.toString());

@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
+
 public class UserDao extends GenericDao<User, Integer> {
 	public UserDao(String contextPath, String schemaName) {
 		super(contextPath, schemaName);
@@ -24,7 +26,7 @@ public class UserDao extends GenericDao<User, Integer> {
 		return userList;
 	}
 	
-	public boolean checkAccount(String username,String password)
+	public boolean checkAccount(String username,String password) throws IOException, JAXBException
 	{
 		boolean valid = em.checkAccount(username, password);
 		return valid;
