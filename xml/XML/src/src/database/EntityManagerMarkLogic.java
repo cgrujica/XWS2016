@@ -388,24 +388,6 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 					props.database, props.user, props.password, props.authType);
 		}
 
-		/*
-		 * // Initialize query manager QueryManager queryManager =
-		 * client.newQueryManager();
-		 * 
-		 * // Query definition is used to specify Google-style query string
-		 * StringQueryDefinition queryDefinition = queryManager
-		 * .newStringDefinition();
-		 * 
-		 * // Search within a specific collection
-		 * queryDefinition.setCollections("/zakoni/example");
-		 * 
-		 * // Perform search DOMHandle res =
-		 * queryManager.search(queryDefinition, new DOMHandle());
-		 * 
-		 * // Serialize search results to the standard output Document
-		 * resultsDocument = res.get();
-		 */
-
 		// Initialize XQuery invoker object
 		ServerEvaluationCall invoker = client.newServerEval();
 

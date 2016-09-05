@@ -12,6 +12,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.xml.sax.SAXException;
+
 import src.rs.gov.parlament.propisi.Zakon;
 import src.sessionbeans.TestDao;
 import src.sessionbeans.TestDaoLocal;
@@ -55,5 +57,21 @@ public class TestService {
     	s1 =  testDao.test();
 		return "fg";
     }	
-   
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    public void testExport(Zakon z) {
+    	ExportService export;
+		try {
+			export = new ExportService(servletContext, z);
+			export.export();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 }
