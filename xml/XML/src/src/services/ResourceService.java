@@ -71,6 +71,26 @@ public class ResourceService {
 	}
 	
 	@GET
+	@Path("/zakonipendingj")
+    @Produces(MediaType.APPLICATION_JSON)
+	public List<Zakon> getPendingZakoniJson() {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		List<Zakon> docs = resource.getZakoni("pending"); 
+		
+		return docs;
+	}
+	
+	@GET
+	@Path("/zakonicompletedj")
+    @Produces(MediaType.APPLICATION_JSON)
+	public List<Zakon> getCompletedZakoniJson() {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		List<Zakon> docs = resource.getZakoni("completed"); 
+		
+		return docs;
+	}
+	
+	@GET
 	@Path("/korisnici")
 	@Produces(MediaType.APPLICATION_XML)
 	public PrecednikSkupstine getPrec() throws JAXBException {

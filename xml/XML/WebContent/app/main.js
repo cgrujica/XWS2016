@@ -28,7 +28,7 @@
 				;
 
 				function getRes() {
-					ResourceService.getRes().success(function(data) {
+					ResourceService.getResPen().success(function(data) {
 						$scope.res = data;
 					});
 				}

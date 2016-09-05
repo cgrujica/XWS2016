@@ -35,7 +35,7 @@
 				;
 
 				function getRes() {		//ovde se ocekuju svi izglasani zakoni gradjani im imaju pristip
-					ResourceService.getRes().success(function(data) {
+					ResourceService.getAll().success(function(data) {
 						$scope.res = data;
 					});
 				}
