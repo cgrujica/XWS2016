@@ -2,13 +2,17 @@ package src.services;
 
 import java.io.IOException;
 
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import src.rs.gov.parlament.propisi.Zakon;
 import src.sessionbeans.TestDao;
 import src.sessionbeans.TestDaoLocal;
  
@@ -19,7 +23,7 @@ public class TestService {
 	private TestDaoLocal testDao;
 	
 	@javax.ws.rs.core.Context
-	private ServletContext servletContext; 
+	private ServletContext servletContext;
 	
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -48,7 +52,8 @@ public class TestService {
     	  if(null != out) try { out.close(); }
     	  catch (IOException ioe) { og this }
     	} */
-    	s1 = testDao.test();
+    	s1 =  testDao.test();
 		return "fg";
-    }
+    }	
+   
 }
