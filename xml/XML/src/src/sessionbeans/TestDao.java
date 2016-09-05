@@ -12,9 +12,9 @@ import src.rs.gov.parlament.propisi.Zakon;
 @Local(TestDaoLocal.class)
 public class TestDao extends GenericDao<Zakon, Long> implements TestDaoLocal{
 
-    public static final String contextPath = "rs.gov.parlament.propisi";
+	public static final String contextPath = "src.http.www_parlament_gov_rs.korisnici";
 	
-	public static final String schemaName = "zakon";
+	public static final String schemaName = "klijent";
 	
 	public TestDao() {
 		super(contextPath, schemaName);

@@ -2,6 +2,7 @@ package src.database;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -41,6 +43,10 @@ import com.marklogic.client.eval.ServerEvaluationCall;
 import com.marklogic.client.io.DOMHandle;
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.InputStreamHandle;
+import com.marklogic.client.io.SearchHandle;
+import com.marklogic.client.query.KeyValueQueryDefinition;
+import com.marklogic.client.query.MatchDocumentSummary;
+import com.marklogic.client.query.MatchLocation;
 import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 import com.sun.org.apache.bcel.internal.generic.NEW;
@@ -227,38 +233,48 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		this.context = context;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void saveClient() throws IOException, JAXBException {
 
-		props = ConnUtil.loadProperties();
+@SuppressWarnings("unchecked")
+	public void saveClient()  {
 
+		try {
+			props = ConnUtil.loadProperties();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port,
-					props.database, props.user, props.password, props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
 
-		String docId = "/example/books.xml";
+		String docId = "/example/klijent.xml";
 
-		File f = new File("F:\\FAX\\XML-2016\\PROJEKAT\\primer zakona.xml");
+		File f = new File("F:\\FAX\\XML-2016\\PROJEKAT\\primer klijenta.xml");
 
-		FileInputStream fi = new FileInputStream(f);
+		FileInputStream fi = null;
+		try {
+			fi = new FileInputStream(f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Create an input stream handle to hold XML content.
 		InputStreamHandle handle = new InputStreamHandle(fi);
 
 		// Write the document to the database
-		System.out.println("[INFO] Inserting \"" + docId + "\" to \""
-				+ props.database + "\" database.");
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \"" + props.database + "\" database.");
 		xmlManager.write(docId, handle);
 
-		System.out.println("[INFO] Verify the content at: http://" + props.host
-				+ ":8000/v1/documents?database=" + props.database + "&uri="
-				+ docId);
+		System.out.println("[INFO] Verify the content at: http://" + props.host + ":8000/v1/documents?database="
+				+ props.database + "&uri=" + docId);
 
 		// Release the client
 		client.release();
@@ -464,10 +480,6 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		return results;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean checkAccount(String username, String password) {
-		return true;
-	}
 
 	public boolean addZakon(Zakon z, File tempDir) throws IOException {
 		props = ConnUtil.loadProperties();
@@ -573,5 +585,54 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		client.release();
 
 		return true;
+	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public boolean checkAccount(String username, String password) throws IOException, JAXBException {
+		boolean valid = false;
+		Zakon results = null;
+
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
+		}
+		
+		QueryManager queryMgr = client.newQueryManager();
+		SearchHandle handle = new SearchHandle();
+		KeyValueQueryDefinition query = queryMgr.newKeyValueDefinition();
+		query.put(queryMgr.newElementLocator(new QName("korisnicko_ime")),username);
+		queryMgr.search(query, handle);
+		MatchDocumentSummary matches1[] = handle.getMatchResults();
+		//Document resultsDocument = handle.get();
+		
+		SearchHandle handle2 = new SearchHandle();
+		KeyValueQueryDefinition query2 = queryMgr.newKeyValueDefinition();
+		query2.put(queryMgr.newElementLocator(new QName("lozinka")),password);
+		queryMgr.search(query2, handle2);
+		MatchDocumentSummary matches2[] = handle2.getMatchResults();
+		
+		MatchLocation[] user = matches1[0].getMatchLocations();
+		MatchLocation[] pass = matches2[0].getMatchLocations();
+		for(int i=0;i<user.length;i++)
+		{
+			for (int y=0;y<pass.length;y++)
+			{
+				if(user[i].getPath().equals(pass[y].getPath()))
+				{
+					valid = true;
+				}
+			}
+		}
+
+		// Release the client
+		client.release();
+		
+		
+		return valid;
 	}
 }
