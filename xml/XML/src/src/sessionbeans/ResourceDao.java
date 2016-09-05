@@ -19,7 +19,7 @@ import src.rs.gov.parlament.propisi.Zakon;
 @Local(ResourceDaoLocal.class)
 public class ResourceDao extends GenericDao<Zakon, Long> implements ResourceDaoLocal{
 
-    public static final String schemaName = "PrecednikSkupstine";
+    public static final String schemaName = "Zakon";
 	
 	public ResourceDao(String contextPath) {
 		super(contextPath, schemaName);
