@@ -14,6 +14,10 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
 		url : '/gradjani',
 		templateUrl : 'html/gradjani.html',
 		controller : 'gradjaniCtrl'
+	}).state('poslanik', {
+		url : '/poslanik',
+		templateUrl : 'html/poslanik.html',
+		controller : 'poslanikCtrl'
 	});
 });
 

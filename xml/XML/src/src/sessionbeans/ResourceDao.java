@@ -1,5 +1,6 @@
 package src.sessionbeans;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import src.rs.gov.parlament.propisi.Zakon;
 @Local(ResourceDaoLocal.class)
 public class ResourceDao extends GenericDao<Zakon, Long> implements ResourceDaoLocal{
 
-    public static final String schemaName = "PrecednikSkupstine";
+    public static final String schemaName = "Zakon";
 	
 	public ResourceDao(String contextPath) {
 		super(contextPath, schemaName);
@@ -63,4 +64,13 @@ public class ResourceDao extends GenericDao<Zakon, Long> implements ResourceDaoL
 		return docs;
 	}
 	
+	@Override
+	public boolean addZakon(Zakon z, File f) {
+		try {
+			return em.addZakon(z, f);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

@@ -2,11 +2,13 @@ package src.database;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -81,7 +84,8 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		transformerFactory = TransformerFactory.newInstance();
 	}
 
-	public EntityManagerMarkLogic(String schemaName, String contextPath) throws JAXBException {
+	public EntityManagerMarkLogic(String schemaName, String contextPath)
+			throws JAXBException {
 		setSchemaName(schemaName);
 		setContextPath(contextPath);
 
@@ -92,7 +96,8 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		unmarshaller = context.createUnmarshaller();
 
 		try {
-			marklogic_context = JAXBContext.newInstance(ClassUtils.getClasses(MARKLOGIC_CONTEXT_PATH));
+			marklogic_context = JAXBContext.newInstance(ClassUtils
+					.getClasses(MARKLOGIC_CONTEXT_PATH));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,11 +121,11 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -151,7 +156,8 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	/*
 	 * Takes both, XQuery and XUpdate statements.
 	 */
-	public InputStream executeQuery(String xQuery, boolean wrap) throws IOException {
+	public InputStream executeQuery(String xQuery, boolean wrap)
+			throws IOException {
 		// TO-DO
 		return null;
 	}
@@ -164,7 +170,8 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		// TO-DO
 	}
 
-	public void update(T entity, ID resourceId) throws IOException, JAXBException {
+	public void update(T entity, ID resourceId) throws IOException,
+			JAXBException {
 		// TO-DO
 	}
 
@@ -225,12 +232,12 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		props = ConnUtil.loadProperties();
 
-		if (client == null) {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
-					props.authType);
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -245,11 +252,13 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		InputStreamHandle handle = new InputStreamHandle(fi);
 
 		// Write the document to the database
-		System.out.println("[INFO] Inserting \"" + docId + "\" to \"" + props.database + "\" database.");
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \""
+				+ props.database + "\" database.");
 		xmlManager.write(docId, handle);
 
-		System.out.println("[INFO] Verify the content at: http://" + props.host + ":8000/v1/documents?database="
-				+ props.database + "&uri=" + docId);
+		System.out.println("[INFO] Verify the content at: http://" + props.host
+				+ ":8000/v1/documents?database=" + props.database + "&uri="
+				+ docId);
 
 		// Release the client
 		client.release();
@@ -258,12 +267,12 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	public void insertInto() throws IOException {
 		props = ConnUtil.loadProperties();
 
-		if (client == null) {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
-					props.authType);
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -278,11 +287,13 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		InputStreamHandle handle = new InputStreamHandle(fi);
 
 		// Write the document to the database
-		System.out.println("[INFO] Inserting \"" + docId + "\" to \"" + props.database + "\" database.");
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \""
+				+ props.database + "\" database.");
 		xmlManager.write(docId, handle);
 
-		System.out.println("[INFO] Verify the content at: http://" + props.host + ":8000/v1/documents?database="
-				+ props.database + "&uri=" + docId);
+		System.out.println("[INFO] Verify the content at: http://" + props.host
+				+ ":8000/v1/documents?database=" + props.database + "&uri="
+				+ docId);
 
 		// Release the client
 		client.release();
@@ -304,7 +315,8 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 			Transformer transformer = transformerFactory.newTransformer();
 
 			// Indentacija serijalizovanog izlaza
-			transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2");
+			transformer.setOutputProperty(
+					"{http://xml.apache.org/xalan}indent-amount", "2");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 			// Nad "source" objektom (DOM stablo) vrši se transformacija
@@ -332,11 +344,11 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -372,11 +384,11 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
 		}
 
 		// Initialize XQuery invoker object
@@ -396,7 +408,6 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		if (response.hasNext()) {
 
 			for (EvalResult result : response) {
-				System.out.println("\n" + result.getString());
 				StringReader st = new StringReader(result.getString());
 				results.add((Zakon) unmarshaller.unmarshal(st));
 			}
@@ -415,11 +426,11 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		props = ConnUtil.loadProperties();
 
 		if (props.database.equals("")) {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
 		} else {
-			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
-					props.authType);
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
 		}
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
@@ -441,7 +452,8 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		System.out.println("[INFO] Retrieved content:");
 		// transform(doc, System.out);
 
-		JAXBContext cont = JAXBContext.newInstance("src.http.www_parlament_gov_rs.korisnici");
+		JAXBContext cont = JAXBContext
+				.newInstance("src.http.www_parlament_gov_rs.korisnici");
 		Unmarshaller un = cont.createUnmarshaller();
 
 		// Unmarshalling generiše objektni model na osnovu XML fajla //new
@@ -454,6 +466,112 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 	@SuppressWarnings("unchecked")
 	public boolean checkAccount(String username, String password) {
+		return true;
+	}
+
+	public boolean addZakon(Zakon z, File tempDir) throws IOException {
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
+		}
+
+		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
+
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		metadata.getCollections().add("/zakon/pending");
+
+		String docId = "/zakon/pending/" + z.getID() + ".xml";
+
+		File target = new File(tempDir, z.getID() + ".xml");
+
+		// Podešavanje marshaller-a
+		try {
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+					Boolean.TRUE);
+			marshaller.marshal(z, target);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+
+		FileInputStream fi = new FileInputStream(target);
+
+		// Create an input stream handle to hold XML content.
+		InputStreamHandle handle = new InputStreamHandle(fi);
+
+		// Write the document to the database
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \""
+				+ props.database + "\" database.");
+		xmlManager.write(docId, metadata, handle);
+
+		System.out.println("[INFO] Verify the content at: http://" + props.host
+				+ ":8000/v1/documents?database=" + props.database + "&uri="
+				+ docId);
+
+		// Release the client
+		client.release();
+
+		return true;
+	}
+
+	public boolean deleteZakon(int id) throws IOException {
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
+		}
+
+		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
+
+		String docId = "/zakon/pending/" + id + ".xml";
+
+		xmlManager.delete(docId);
+
+		// Release the client
+		client.release();
+
+		return true;
+	}
+
+	public boolean updateZakon(int id) throws IOException {
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
+		}
+
+		// Initialize XQuery invoker object
+		ServerEvaluationCall invokerRemove = client.newServerEval();
+
+		// Read the file contents into a string object
+		String query = "xdmp:document-remove-collections(\"/zakon/pending/" + id + ".xml\", \"/zakon/pending\")";
+
+		// Invoke the query
+		invokerRemove.xquery(query);
+
+		// Interpret the results
+		EvalResultIterator response = invokerRemove.eval();
+
+		ServerEvaluationCall invokerUpdate = client.newServerEval();
+		query = "xdmp:document-set-collections(\"/zakon/pending/" + id + ".xml\", \"/zakon/completed\")";
+		invokerUpdate.xquery(query);
+		response = invokerUpdate.eval();
+		
+		// Release the client
+		client.release();
+
 		return true;
 	}
 }
