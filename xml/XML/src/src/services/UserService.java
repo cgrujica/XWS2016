@@ -27,7 +27,7 @@ public class UserService {
 	@Context
     private HttpServletResponse servletResponse;
 	
-	UserDao k = new UserDao("","");
+	UserDao k = new UserDao("src.http.www_parlament_gov_rs.korisnici","");
 	
 	@GET
 	@Path("/test")

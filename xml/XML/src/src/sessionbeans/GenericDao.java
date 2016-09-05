@@ -25,7 +25,7 @@ public abstract class GenericDao<T, ID extends Serializable> implements GenericD
 	public GenericDao(String contextPath, String schemaName) {
 		
 		try {
-			context = JAXBContext.newInstance(ClassUtils.getClasses(contextPath));
+			context = JAXBContext.newInstance(contextPath);
 			em = new EntityManagerMarkLogic<T, ID>(schemaName, contextPath);
 			
 		} catch (Exception e) {

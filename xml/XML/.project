@@ -33,11 +33,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>WebContent/WEB-INF/lib/jersey-json-1.17.jar</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/jersey-json-1.17.jar</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -270,7 +270,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		String docId = "/example/books.xml";
 
-		File f = new File("C:\\Users\\Danilo\\Documents\\primer zakona.xml");
+		File f = new File("F:\\FAX\\XML-2016\\PROJEKAT\\primer zakona.xml");
 
 		FileInputStream fi = new FileInputStream(f);
 
