@@ -2,6 +2,7 @@ package src.database;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +17,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -225,7 +227,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		props = ConnUtil.loadProperties();
 
-		if (client == null) {
+		if (props.database.equals("")) {
 			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
 					props.authType);
 		} else {
@@ -258,7 +260,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	public void insertInto() throws IOException {
 		props = ConnUtil.loadProperties();
 
-		if (client == null) {
+		if (props.database.equals("")) {
 			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
 					props.authType);
 		} else {
@@ -450,9 +452,55 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		client.release();
 		return results;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public boolean checkAccount(String username, String password) {
+		return true;
+	}
+	
+	public boolean addZakon(Zakon z, File tempDir) throws IOException {
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.user, props.password,
+					props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
+					props.authType);
+		}
+
+		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
+
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		metadata.getCollections().add("/zakon/completed");
+		
+		String docId = "/zakon/pending/" + z.getID() + ".xml";
+
+		File target = new File(tempDir, z.getID()+".xml");
+		
+		// Podešavanje marshaller-a
+	 	try {
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			marshaller.marshal(z, target);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	 	
+		FileInputStream fi = new FileInputStream(target);
+
+		// Create an input stream handle to hold XML content.
+		InputStreamHandle handle = new InputStreamHandle(fi);
+
+		// Write the document to the database
+		System.out.println("[INFO] Inserting \"" + docId + "\" to \"" + props.database + "\" database.");
+		xmlManager.write(docId, metadata, handle);
+
+		System.out.println("[INFO] Verify the content at: http://" + props.host + ":8000/v1/documents?database="
+				+ props.database + "&uri=" + docId);
+
+		// Release the client
+		client.release();
+		
 		return true;
 	}
 }

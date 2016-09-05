@@ -1,10 +1,15 @@
 package src.services;
 
+import java.io.File;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,6 +24,9 @@ import src.sessionbeans.ResourceDaoLocal;
 @Path("/resurs")
 public class ResourceService {
 
+	@Context
+	private ServletContext servletContext;
+	
 	//@EJB
 	private ResourceDaoLocal resource;
 	
@@ -50,5 +58,18 @@ public class ResourceService {
 		PrecednikSkupstine docs = resource.getPrec();
 		
 		return docs;
+	}
+	
+	@POST
+	@Path("/addZakon")
+	@Consumes(MediaType.APPLICATION_XML)
+	public String addZakon(Zakon z) {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		
+		File file = (File)servletContext.getAttribute("javax.servlet.context.tempdir");
+		boolean result = resource.addZakon(z, file);
+		
+		if(result == true) return "True";
+		else return "False";
 	}
 }
