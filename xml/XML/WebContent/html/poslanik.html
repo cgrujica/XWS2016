@@ -1,0 +1,21 @@
+<div>
+	<table style="display: inline-table;">
+		<tbody>
+			<tr>
+				<td>Ime</td>
+				<td><b>{{user.ime}}</b></td>
+			</tr>
+			<tr>
+				<td>Prezime</td>
+				<td><b>{{user.prezime}}</b></td>
+			</tr>
+		</tbody>
+	</table>
+	<div align="center">
+		<form action="">
+		<input type="text" required placeholder="Naziv" ng-model="zakon.naziv">
+		</form>
+		<div id="editor"></div>
+	</div>
+	<button ng-click="logout()">Logout</button>
+</div>

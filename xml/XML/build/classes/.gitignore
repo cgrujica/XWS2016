@@ -1,4 +1,5 @@
-/src/
-/zakon_template_pdf.xsl
-/zakoni_template_xhtml.xsl
 /zakon_template_xhtml.xsl
+/connection.properties
+/fop.xconf
+/src
+/zakon_template_pdf.xsl
