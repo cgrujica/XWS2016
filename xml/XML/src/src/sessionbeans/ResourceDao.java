@@ -52,10 +52,10 @@ public class ResourceDao extends GenericDao<Zakon, Long> implements ResourceDaoL
 	}
 
 	@Override
-	public List<Zakon> getZakoni() {
+	public List<Zakon> getZakoni(String kolekcija) {
 		List<Zakon> docs = new ArrayList<Zakon>();
 		try {
-			 docs = em.findZakoni();
+			 docs = em.findZakoni(kolekcija);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JAXBException e) {

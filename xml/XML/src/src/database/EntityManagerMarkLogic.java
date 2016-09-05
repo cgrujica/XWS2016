@@ -394,7 +394,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Zakon> findZakoni() throws IOException, JAXBException {
+	public List<Zakon> findZakoni(String kolekcija) throws IOException, JAXBException {
 		List<Zakon> results = new ArrayList<Zakon>();
 
 		props = ConnUtil.loadProperties();
@@ -411,7 +411,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		ServerEvaluationCall invoker = client.newServerEval();
 
 		// Read the file contents into a string object
-		String query = "fn:collection(\"/zakon/example\")";
+		String query = "fn:collection(\"/zakon/" + kolekcija + "\")";
 
 		// Invoke the query
 		invoker.xquery(query);
@@ -496,8 +496,9 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 		metadata.getCollections().add("/zakon/pending");
+		metadata.getCollections().add("/zakon/all");
 
-		String docId = "/zakon/pending/" + z.getID() + ".xml";
+		String docId = "/zakon/" + z.getID() + ".xml";
 
 		File target = new File(tempDir, z.getID() + ".xml");
 
@@ -543,7 +544,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 
 		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
 
-		String docId = "/zakon/pending/" + id + ".xml";
+		String docId = "/zakon/" + id + ".xml";
 
 		xmlManager.delete(docId);
 
@@ -568,7 +569,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		ServerEvaluationCall invokerRemove = client.newServerEval();
 
 		// Read the file contents into a string object
-		String query = "xdmp:document-remove-collections(\"/zakon/pending/" + id + ".xml\", \"/zakon/pending\")";
+		String query = "xdmp:document-remove-collections(\"/zakon/" + id + ".xml\", \"/zakon/pending\")";
 
 		// Invoke the query
 		invokerRemove.xquery(query);
@@ -577,7 +578,7 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		EvalResultIterator response = invokerRemove.eval();
 
 		ServerEvaluationCall invokerUpdate = client.newServerEval();
-		query = "xdmp:document-set-collections(\"/zakon/pending/" + id + ".xml\", \"/zakon/completed\")";
+		query = "xdmp:document-set-collections(\"/zakon/" + id + ".xml\", (\"/zakon/completed\", \"/zakon/all\"))";
 		invokerUpdate.xquery(query);
 		response = invokerUpdate.eval();
 		

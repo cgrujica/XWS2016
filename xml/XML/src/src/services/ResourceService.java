@@ -35,7 +35,27 @@ public class ResourceService {
     @Produces(MediaType.APPLICATION_JSON)
 	public List<Zakon> getAllZakoniJson() {
 		resource = new ResourceDao("src.rs.gov.parlament.propisi");
-		List<Zakon> docs = resource.getZakoni(); 
+		List<Zakon> docs = resource.getZakoni("all"); 
+		
+		return docs;
+	}
+	
+	@GET
+	@Path("/zakonipendingx")
+    @Produces(MediaType.APPLICATION_XML)
+	public List<Zakon> getPendingZakoniXml() {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		List<Zakon> docs = resource.getZakoni("pending"); 
+		
+		return docs;
+	}
+	
+	@GET
+	@Path("/zakonicompletedx")
+    @Produces(MediaType.APPLICATION_XML)
+	public List<Zakon> getCompletedZakoniXml() {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		List<Zakon> docs = resource.getZakoni("completed"); 
 		
 		return docs;
 	}
@@ -45,7 +65,7 @@ public class ResourceService {
     @Produces(MediaType.APPLICATION_XML)
 	public List<Zakon> getAllZakoniXml() {
 		resource = new ResourceDao("src.rs.gov.parlament.propisi");
-		List<Zakon> docs = resource.getZakoni(); 
+		List<Zakon> docs = resource.getZakoni("all"); 
 		
 		return docs;
 	}
