@@ -636,4 +636,46 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		
 		return valid;
 	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public Zakon getZakonByID(String id) throws IOException, JAXBException
+	{
+		Zakon z = new Zakon();
+
+		props = ConnUtil.loadProperties();
+
+		if (props.database.equals("")) {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.user, props.password, props.authType);
+		} else {
+			client = DatabaseClientFactory.newClient(props.host, props.port,
+					props.database, props.user, props.password, props.authType);
+		}
+
+		XMLDocumentManager xmlManager = client.newXMLDocumentManager();
+
+		// A handle to receive the document's content.
+		DOMHandle content = new DOMHandle();
+
+		// A metadata handle for metadata retrieval
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+
+		String docId = "/zakon/" + id + ".xml";
+
+		xmlManager.read(docId, metadata, content);
+
+		// Retrieving a document node form DOM handle.
+		Document doc = content.get();
+
+		// Serializing DOM tree to standard output.
+		System.out.println("[INFO] Retrieved content:");
+		// transform(doc, System.out);
+
+		Zakon r = (Zakon) unmarshaller.unmarshal(doc);
+		z = r;
+
+		client.release();		
+		
+		return z;	
+	}
 }

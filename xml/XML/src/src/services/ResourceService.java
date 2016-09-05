@@ -92,4 +92,13 @@ public class ResourceService {
 		if(result == true) return "True";
 		else return "False";
 	}
+	
+	@GET
+	@Path("/zakonij")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Zakon getZakonByID(String id) {
+		resource = new ResourceDao("src.rs.gov.parlament.propisi");
+		Zakon zakon = resource.getZakonByID(id);
+		return zakon;
+	}
 }

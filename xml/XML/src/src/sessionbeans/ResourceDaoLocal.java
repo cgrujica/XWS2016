@@ -15,4 +15,5 @@ public interface ResourceDaoLocal extends GenericDaoLocal<Zakon, Long>{
 	public List<Zakon> getZakoni(String kolekcija);
 	public PrecednikSkupstine getPrec();
 	public boolean addZakon(Zakon z, File f);
+	public Zakon getZakonByID(String id);
 }
