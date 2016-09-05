@@ -10,10 +10,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-public class UserDao extends GenericDao<User, Integer>{
-   public UserDao(String contextPath, String schemaName) {
+public class UserDao extends GenericDao<User, Integer> {
+	public UserDao(String contextPath, String schemaName) {
 		super(contextPath, schemaName);
 		// TODO Auto-generated constructor stub
 	}
@@ -44,10 +42,8 @@ public List<User> getAllUsers(){
       }
    }   
    
-   public User getKorisnik(String id) {
-	   User r = new User();
+	public List<User> getAllUsers() {
 		return r;
 	}
-   
 
 }
