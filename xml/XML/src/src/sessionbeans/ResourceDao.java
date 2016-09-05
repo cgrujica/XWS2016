@@ -73,4 +73,17 @@ public class ResourceDao extends GenericDao<Zakon, Long> implements ResourceDaoL
 			return false;
 		}
 	}
+
+	@Override
+	public Zakon getZakonByID(String id) {
+		Zakon zakon = new Zakon();
+		try {
+			zakon = em.getZakonByID(id);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}	
+		return zakon;
+	}
 }
