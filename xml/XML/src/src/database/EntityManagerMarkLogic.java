@@ -396,7 +396,6 @@ public class EntityManagerMarkLogic<T, ID extends Serializable> {
 		if (response.hasNext()) {
 
 			for (EvalResult result : response) {
-				System.out.println("\n" + result.getString());
 				StringReader st = new StringReader(result.getString());
 				results.add((Zakon) unmarshaller.unmarshal(st));
 			}

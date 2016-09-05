@@ -21,7 +21,6 @@ import src.rs.gov.parlament.propisi.Zakon;
 public class ArchiveService {
 	
 	public ArchiveService() {
-		
 	}
 	
 	@Context

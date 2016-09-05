@@ -56,22 +56,6 @@ public class TestService {
     	} */
     	s1 =  testDao.test();
 		return "fg";
-    }	
-    
-    @POST
-    @Consumes(MediaType.APPLICATION_XML)
-    public void testExport(Zakon z) {
-    	ExportService export;
-		try {
-			export = new ExportService(servletContext, z);
-			export.export();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
     
 }
